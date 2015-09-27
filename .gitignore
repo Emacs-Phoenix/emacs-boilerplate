@@ -1,0 +1,11 @@
+node_modules
+GPATH
+GRTAGS
+GSYMS
+GTAGS
+*.swp
+#*
+\#*
+*#
+tags
+*~
