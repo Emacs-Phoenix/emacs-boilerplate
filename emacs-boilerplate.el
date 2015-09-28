@@ -12,22 +12,22 @@
   "Name of the buffer where output from the running process is displayed.")
 
 
-(defun declare-boilerplate (name fn)
-  "Add boilerplate to the list of available ones"
-  (add-to-list 'available-boilerplate (cons name fn)))
-
 (defun touch-boilerplate ()
   (interactive)
-  (message available-boilerplate)
   (let ((name (completing-read "Boilerplate: " (-map 'car available-boilerplate) nil)))
     (call-interactively (cdr (assoc name)))))
 
 
-(when (file-exists-p pa-folder)
-  (--each (directory-files pa-folder nil "^[^#].*el$")
-    (load (expand-file-name it pa-folder))))
+(when (file-exists-p boilerplate-path)
+  (--each (directory-files boilerplate-path nil "^[^.git|README.md]")
+    (add-to-list 'available-boilerplate it)))
 
 
+(defun boilerplate ()
+  (interactive)
+  (let ((boil (ido-completing-read "Choose boilerplate: " available-boilerplate nil t)))
+    (when boil
+      (message boil))))
 
 (provide 'emacs-boilerplate)
 ;;; emacs-boilerplate.el ends here
