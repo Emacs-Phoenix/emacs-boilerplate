@@ -19,7 +19,7 @@
 
 
 (when (file-exists-p boilerplate-path)
-  (--each (directory-files boilerplate-path nil "^[^.git|README.md]")
+  (--each (directory-files boilerplate-path nil nil)
     (add-to-list 'available-boilerplate it)))
 
 
@@ -27,7 +27,22 @@
   (interactive)
   (let ((boil (ido-completing-read "Choose boilerplate: " available-boilerplate nil t)))
     (when boil
-      (message boil))))
+      (copy-boilerplate-directory boil))))
+
+(defun check-file-or-dir (boil)
+  (file-directory-p))
+
+(defun copy-boilerplate-directory (boil)
+  (let ((name (read-from-minibuffer "New Name: " boil)))
+    (copy-directory (expand-file-name boilerplate-path boil)
+                    (concat
+                     (file-name-directory
+                      (or load-file-name buffer-file-name)) name))))
+
+
+(--each (-remove (lambda (boil) (or (s-equals? ".git" boil) (s-equals? "README.md" boil)))
+                 (directory-files boilerplate-path nil nil))
+  (message it))
 
 (provide 'emacs-boilerplate)
 ;;; emacs-boilerplate.el ends here
