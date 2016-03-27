@@ -11,7 +11,6 @@
 (defvar boil-output "*boilerplate-output*"
   "Name of the buffer where output from the running process is displayed.")
 
-
 (defun touch-boilerplate ()
   (interactive)
   (let ((name (completing-read "Boilerplate: " (-map 'car available-boilerplate) nil)))
@@ -19,8 +18,10 @@
 
 
 (when (file-exists-p boilerplate-path)
-  (--each (directory-files boilerplate-path nil "^[^.git|README.md]")
+  (--each (directory-files boilerplate-path nil "[^.git|README.md]")
+    (message it)
     (add-to-list 'available-boilerplate it)))
+
 
 
 (defun boilerplate ()
